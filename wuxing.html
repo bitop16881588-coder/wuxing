@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>命理五行 · 開運水晶</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0c0c11; --ink2:#14141b; --panel:#1a1a23; --panel2:#22222d;
+  --line:rgba(212,180,131,0.18); --line2:rgba(212,180,131,0.35);
+  --text:#ece6d8; --text2:#a39c8c; --text3:#6f695c;
+  --gold:#d4b483; --gold2:#c8a96a;
+  --el:#d4b483; --el-soft:rgba(212,180,131,0.14); --el-glow:rgba(212,180,131,0.4);
+}
+html,body{background:var(--ink);}
+body{
+  font-family:'Noto Serif TC',serif; color:var(--text); min-height:100vh;
+  background:
+    radial-gradient(900px 600px at 50% -10%, var(--el-soft), transparent 60%),
+    radial-gradient(700px 500px at 100% 110%, rgba(212,180,131,0.05), transparent 55%),
+    linear-gradient(180deg,#0c0c11 0%,#101017 100%);
+  background-attachment:fixed; transition:background 1.2s ease; position:relative; overflow-x:hidden;
+}
+body::after{content:""; position:fixed; inset:0; pointer-events:none; opacity:0.035; z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.wrap{position:relative; z-index:1; max-width:560px; margin:0 auto; padding:3rem 1.25rem 4rem;}
+.head{text-align:center; margin-bottom:2.5rem;}
+.head .seal{display:inline-flex; align-items:center; justify-content:center; width:54px; height:54px; border:1.5px solid var(--line2); border-radius:50%; font-family:'Ma Shan Zheng',cursive; font-size:30px; color:var(--gold); margin-bottom:1rem; box-shadow:0 0 24px var(--el-soft); transition:all 1s;}
+.head h1{font-family:'Ma Shan Zheng',cursive; font-size:40px; font-weight:400; letter-spacing:0.08em; color:var(--text); line-height:1.1;}
+.head .sub{font-size:13px; color:var(--text2); letter-spacing:0.28em; margin-top:0.6rem;}
+.divider{width:40px; height:1px; background:linear-gradient(90deg,transparent,var(--gold2),transparent); margin:1.2rem auto 0;}
+.panel{background:linear-gradient(180deg,var(--panel),var(--ink2)); border:1px solid var(--line); border-radius:16px; padding:1.75rem 1.5rem; box-shadow:0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);}
+.panel .q{font-size:15px; color:var(--text2); text-align:center; margin-bottom:1.4rem; letter-spacing:0.05em;}
+.date-row{display:flex; gap:10px; margin-bottom:1.5rem;}
+.field{flex:1; position:relative;}
+.field label{display:block; font-size:11px; color:var(--text3); letter-spacing:0.2em; margin-bottom:6px; text-align:center;}
+select{width:100%; appearance:none; -webkit-appearance:none; background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:10px; padding:12px 10px; font-family:inherit; font-size:15px; text-align:center; text-align-last:center; cursor:pointer; outline:none; transition:border-color .2s, box-shadow .2s;}
+select:focus{border-color:var(--gold2); box-shadow:0 0 0 3px rgba(212,180,131,0.12);}
+select option{background:#1a1a23; color:var(--text);}
+.btn{width:100%; padding:14px; border:none; border-radius:11px; cursor:pointer; font-family:'Noto Serif TC',serif; font-size:16px; font-weight:600; letter-spacing:0.18em; color:#1a1505; background:linear-gradient(135deg,#e0c693,#c8a96a 60%,#b8975a); box-shadow:0 8px 24px rgba(200,169,106,0.3); transition:transform .15s, box-shadow .2s;}
+.btn:hover{transform:translateY(-1px); box-shadow:0 12px 30px rgba(200,169,106,0.4);}
+.btn:active{transform:translateY(0) scale(.99);}
+.result{margin-top:2rem; opacity:0; transform:translateY(16px); pointer-events:none; transition:opacity .6s, transform .6s;}
+.result.show{opacity:1; transform:none; pointer-events:auto;}
+.result .reveal{opacity:0; transform:translateY(14px); animation:rise .7s forwards;}
+.glyph-card{text-align:center; padding:2rem 1rem 1.5rem;}
+.glyph{font-family:'Ma Shan Zheng',cursive; font-size:130px; line-height:1; color:var(--el); text-shadow:0 0 50px var(--el-glow); margin-bottom:0.5rem; animation:pop .9s cubic-bezier(.2,.8,.2,1) forwards; display:inline-block;}
+.el-label{font-size:13px; color:var(--text2); letter-spacing:0.35em; margin-bottom:6px;}
+.el-name{font-size:24px; font-weight:600; color:var(--text); letter-spacing:0.1em;}
+.el-name span{color:var(--el);}
+.meta-line{font-size:13px; color:var(--text2); margin-top:10px; letter-spacing:0.05em;}
+.meta-line b{color:var(--el); font-weight:600;}
+.sec{margin-top:1.6rem; background:linear-gradient(180deg,var(--panel),var(--ink2)); border:1px solid var(--line); border-radius:14px; padding:1.4rem 1.4rem;}
+.sec-title{display:flex; align-items:center; gap:10px; font-size:13px; color:var(--gold); letter-spacing:0.22em; margin-bottom:1rem;}
+.sec-title::before{content:""; width:18px; height:1px; background:var(--el);}
+.trait{font-size:15px; line-height:1.9; color:var(--text); font-weight:300;}
+.pillars-row{display:flex; gap:8px; justify-content:center; margin-bottom:1.3rem;}
+.pillar{text-align:center; flex:1; max-width:78px;}
+.pillar .pt{font-size:10px; color:var(--text3); letter-spacing:0.2em; margin-bottom:6px;}
+.pillar .pc{font-family:'Ma Shan Zheng',cursive; font-size:28px; line-height:1.05; color:var(--text);}
+.dist{display:flex; flex-direction:column; gap:9px;}
+.dist-row{display:flex; align-items:center; gap:10px;}
+.dist-row .dl{width:20px; font-size:15px; font-weight:600; text-align:center;}
+.bar{flex:1; height:9px; background:var(--panel2); border-radius:6px; overflow:hidden;}
+.bar i{display:block; height:100%; border-radius:6px; transition:width .8s ease;}
+.dist-row .dn{width:54px; font-size:12px; color:var(--text2); text-align:right;}
+.lack-note{margin-top:1.1rem; padding:.95rem 1.1rem; background:var(--el-soft); border:1px solid var(--line); border-radius:11px; font-size:13.5px; line-height:1.8; color:var(--text);}
+.lack-note b{color:var(--el);}
+.colors{display:flex; gap:8px; flex-wrap:wrap;}
+.chip{font-size:13px; padding:6px 14px; border-radius:20px; border:1px solid var(--line2); color:var(--text); display:flex; align-items:center; gap:7px;}
+.dot{width:11px; height:11px; border-radius:50%; box-shadow:0 0 8px currentColor;}
+.psych{list-style:none;}
+.psych li{position:relative; padding:.65rem 0 .65rem 1.4rem; font-size:14.5px; line-height:1.8; color:var(--text); font-weight:300; border-bottom:1px solid var(--line);}
+.psych li:last-child{border-bottom:none; padding-bottom:0;}
+.psych li:first-child{padding-top:0;}
+.psych li::before{content:""; position:absolute; left:0; top:1.2rem; width:7px; height:7px; border-radius:50%; background:var(--el); box-shadow:0 0 8px var(--el-glow);}
+.psych li:first-child::before{top:.55rem;}
+.legend{display:flex; gap:20px; justify-content:center; font-size:11.5px; color:var(--text2); margin:.4rem 0 1.1rem;}
+.legend span{display:flex; align-items:center; gap:6px;}
+.lg-line{width:20px; border-top:2px solid var(--text2);}
+.lg-line.dash{border-top:1.5px dashed var(--text3);}
+.rel{list-style:none; margin-top:.2rem;}
+.rel li{padding:.75rem 0; border-bottom:1px solid var(--line); font-size:14px; line-height:1.8; color:var(--text2); font-weight:300;}
+.rel li:last-child{border-bottom:none; padding-bottom:0;}
+.rel .rt{display:block; font-size:12.5px; color:var(--gold); letter-spacing:0.08em; margin-bottom:4px; font-weight:500;}
+.crystal{display:flex; gap:14px; align-items:flex-start; padding:1rem 0; border-bottom:1px solid var(--line);}
+.cr-img{width:54px; height:54px; flex-shrink:0;}
+.cr-img svg{width:100%; height:100%; display:block; filter:drop-shadow(0 2px 7px rgba(0,0,0,.45));}
+.cr-body{flex:1; min-width:0;}
+.crystal:last-child{border-bottom:none; padding-bottom:0;}
+.crystal:first-child{padding-top:0;}
+.cr-head{display:flex; align-items:baseline; gap:10px; margin-bottom:5px;}
+.cr-name{font-size:17px; font-weight:600; color:var(--text);}
+.cr-en{font-size:11px; color:var(--text3); letter-spacing:0.08em;}
+.cr-fx{font-size:14px; line-height:1.75; color:var(--text2); font-weight:300;}
+.guiren{margin-top:1rem; padding:0.9rem 1.1rem; background:var(--el-soft); border:1px solid var(--line); border-radius:11px; font-size:13.5px; line-height:1.7; color:var(--text);}
+.guiren b{color:var(--el);}
+.disclaimer{text-align:center; font-size:11.5px; color:var(--text3); line-height:1.7; margin-top:2rem; letter-spacing:0.03em;}
+.again{display:block; margin:1.4rem auto 0; background:none; border:1px solid var(--line2); color:var(--text2); padding:10px 22px; border-radius:24px; font-family:inherit; font-size:13px; letter-spacing:0.15em; cursor:pointer; transition:all .2s;}
+.again:hover{color:var(--gold); border-color:var(--gold2);}
+@keyframes rise{to{opacity:1; transform:none;}}
+@keyframes pop{0%{opacity:0; transform:scale(.5) rotate(-6deg);}60%{opacity:1;}100%{opacity:1; transform:scale(1) rotate(0);}}
+footer{text-align:center; font-size:11px; color:var(--text3); margin-top:2.5rem; letter-spacing:0.1em;}
+.gender-row{display:flex; gap:10px; margin-bottom:1.1rem;}
+.g-btn{flex:1; padding:11px; border:1px solid var(--line); border-radius:10px; background:var(--panel2); color:var(--text2); font-family:inherit; font-size:15px; cursor:pointer; transition:all .2s; letter-spacing:.12em;}
+.g-btn.active{border-color:var(--gold2); color:#1a1505; background:linear-gradient(135deg,#e0c693,#c8a96a); font-weight:600;}
+.horo-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem;}
+.horo-sign{font-size:19px; font-weight:600; color:var(--text);}
+.horo-sign .sym{color:var(--gold); margin-right:6px;}
+.horo-date{font-size:12px; color:var(--text2); letter-spacing:.08em;}
+.horo-row{display:flex; align-items:center; justify-content:space-between; padding:.6rem 0; border-bottom:1px solid var(--line);}
+.horo-row .hl{font-size:14.5px; color:var(--text2);}
+.stars{color:var(--gold); letter-spacing:3px; font-size:16px;}
+.stars .off{color:var(--text3);}
+.horo-info{display:flex; gap:24px; margin-top:1rem;}
+.horo-info div{font-size:13.5px; color:var(--text2);}
+.horo-info b{color:var(--el); font-size:16px; font-weight:600;}
+.horo-text{font-size:14.5px; line-height:1.85; color:var(--text); font-weight:300; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--line);}
+.horo-tip{font-size:13px; color:var(--text2); margin-top:.7rem; line-height:1.7;}
+.horo-tip b{color:var(--gold); font-weight:500;}
+.ln-nav{display:flex; align-items:center; justify-content:center; gap:18px; margin-bottom:1.1rem;}
+.ln-nav button{width:34px; height:34px; border-radius:50%; border:1px solid var(--line2); background:var(--panel2); color:var(--gold); font-size:18px; cursor:pointer; line-height:1; transition:all .2s;}
+.ln-nav button:hover{border-color:var(--gold2); color:var(--text);}
+.ln-nav #lnYear{font-family:'Ma Shan Zheng',cursive; font-size:24px; color:var(--text); letter-spacing:.05em; min-width:78px; text-align:center;}
+.ln-gz{font-size:13px; color:var(--text2); text-align:center; margin-bottom:.5rem; line-height:1.85;}
+.ln-gz b{color:var(--text);}
+.ln-type{text-align:center; font-size:17px; color:var(--el); letter-spacing:.12em; font-weight:600; margin-bottom:1rem;}
+.ln-yiji{margin-top:1.1rem; display:flex; flex-direction:column; gap:.6rem;}
+.ln-yiji>div{font-size:13.5px; color:var(--text2); line-height:1.7;}
+.ln-yiji .yi,.ln-yiji .ji{display:inline-flex; width:22px; height:22px; border-radius:50%; align-items:center; justify-content:center; font-size:12px; margin-right:8px; font-weight:600; vertical-align:middle;}
+.ln-yiji .yi{background:rgba(95,179,126,.18); color:#7fcf96;}
+.ln-yiji .ji{background:rgba(214,69,47,.16); color:#e08573;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="seal" id="seal">易</div>
+    <h1>命理五行</h1>
+    <div class="sub">輸入西元生日 · 揭曉本命元神與開運水晶</div>
+    <div class="divider"></div>
+  </div>
+  <div class="panel">
+    <div class="q">請選擇你的性別與西元出生年月日</div>
+    <div class="gender-row">
+      <button class="g-btn active" id="gM" onclick="setGender('男')">♂ 男</button>
+      <button class="g-btn" id="gF" onclick="setGender('女')">♀ 女</button>
+    </div>
+    <div class="date-row">
+      <div class="field"><label>年</label><select id="yy"></select></div>
+      <div class="field"><label>月</label><select id="mm"></select></div>
+      <div class="field"><label>日</label><select id="dd"></select></div>
+    </div>
+    <button class="btn" onclick="reveal()">揭曉我的五行</button>
+  </div>
+  <div class="result" id="result"></div>
+  <footer>※ 本工具依八字推算，僅供文化娛樂與自我覺察參考</footer>
+</div>
+<script>
+const GAN=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const ZHI=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const GAN_WX=['木','木','火','火','土','土','金','金','水','水'];
+const ZHI_WX=['水','土','木','木','土','火','火','土','金','金','土','水'];
+const SX=['鼠','牛','虎','兔','龍','蛇','馬','羊','猴','雞','狗','豬'];
+const WXO=['木','火','土','金','水'];
+
+const DATA={
+  '木':{ color:'#5fb37e', glow:'rgba(95,179,126,.45)', soft:'rgba(95,179,126,.13)',
+    stems:{'甲':'陽木 · 參天大樹','乙':'陰木 · 花草藤蔓'},
+    trait:'日主屬木者，得春生之氣，稟性仁厚、心存惻隱。木主仁，故多懷理想抱負，向上之志不息，如林木向陽、生生不已；處事有章法、講原則。唯木性剛直，逢事易執著難轉圜，過剛則折，此命主一生宜留意之處。',
+    psych:['木性喜伸展，命主上進之志可嘉，然不必事事求進；張弛有度、留白養神，方能行之久遠。','木主仁，命主常為他人設想而忘己。老師勸你：先安頓自身，方有餘力庇蔭旁人。','逢執著難解之時，當自省：此乃守正，抑或負氣？辨之分明，則心結自開。','木喜水潤、喜近自然；得閒多親草木山林，最能涵養你的元氣。'],
+    colors:[['翠綠','#3faf6a'],['青碧','#2e8f7a']],
+    boost:'宜近青綠之色，佩綠幽靈、綠東陵之屬，多親草木山林，以助生發之氣',
+    crystals:[
+      {n:'綠幽靈',en:'Green Phantom',fx:'招正財、聚事業財，幫助事業穩步累積成長，是上班族與創業者的旺事業之石。'},
+      {n:'綠東陵玉',en:'Green Aventurine',fx:'帶來機會與好運，平穩焦躁情緒，增強行動的勇氣與樂觀心態。'},
+      {n:'橄欖石',en:'Peridot',fx:'化解負能量與壓力，帶來希望與活力，旺事業亦有助人緣與感情。'},
+    ],
+    guiren:{el:'水',color:'藍色／黑色',note:'水生木'} },
+  '火':{ color:'#e8654a', glow:'rgba(232,101,74,.45)', soft:'rgba(232,101,74,.13)',
+    stems:{'丙':'陽火 · 烈日驕陽','丁':'陰火 · 燭火星光'},
+    trait:'日主屬火者，稟夏旺之氣，性情明朗熱烈、光華外顯。火主禮，故重情義、講顏面，行事果敢，能照人亦能引人。然火性急烈，來疾去速，每因一時衝動而生悔意；剛中濟之以柔，方為上策。',
+    psych:['火炎易起易滅，情緒之來去乃天性使然，不必苛責；緩一緩再回應，火候自得其宜。','命主每重旁人褒貶。老師勸你：價值當問於己心，毋繫於他人之掌聲。','凡遇大事決斷，宜「隔夜再定」，可免衝動而鑄錯。','火貴有節、不宜長燃；作息規律、靜處養神，於命主尤為要緊。'],
+    colors:[['赤紅','#d6452f'],['絳紫','#8e4ec9'],['橙','#e8843a']],
+    boost:'宜近赤紫之色，佩石榴石、紫水晶之屬，多承陽光、廣結善緣，以助溫煦之氣',
+    crystals:[
+      {n:'石榴石',en:'Garnet',fx:'增強活力與耐力、補氣血、旺女性氣色，並能招來桃花與好人緣。'},
+      {n:'紅紋石',en:'Rhodochrosite',fx:'療癒心輪、招正緣與桃花，提升自信與個人魅力，撫平情緒傷口。'},
+      {n:'紫水晶',en:'Amethyst',fx:'開智慧、助專注與睡眠、安定心神，並能提升貴人運與直覺力。'},
+    ],
+    guiren:{el:'木',color:'綠色',note:'木生火'} },
+  '土':{ color:'#d9a83f', glow:'rgba(217,168,63,.45)', soft:'rgba(217,168,63,.13)',
+    stems:{'戊':'陽土 · 高山厚地','己':'陰土 · 田園沃土'},
+    trait:'日主屬土者，得四季中和之氣，敦厚穩重、信實可託。土主信，故言出必行、承載包容，乃眾人倚仗之樑柱。唯土性沉實，求穩過甚則失於保守，每每躊躇而誤良機，此命主當自警者也。',
+    psych:['命主慣擔人之重。老師提醒：先養己身，非為自私，乃是長久之道。','逢變則心難安，可化整為零、循序漸進，安穩之感自會復歸。','謀定固善，然思慮過久反失其機；要事宜立期限，當斷則斷。','你能為人所依，亦當許己倚人——開口求援，非弱也。'],
+    colors:[['土黃','#d4a017'],['咖啡','#8a6a3a']],
+    boost:'宜近黃褐之色，佩黃水晶、虎眼石之屬，作息有常、踏實守成，以助厚載之氣',
+    crystals:[
+      {n:'黃水晶',en:'Citrine',fx:'招偏財、聚財氣，被譽為「財富之石」，並能增強自信與判斷力。'},
+      {n:'虎眼石',en:'Tiger Eye',fx:'旺事業招財、增強決斷與行動力，氣場強大可辟邪擋煞、護身。'},
+      {n:'茶晶',en:'Smoky Quartz',fx:'強大的接地能量，穩定身心、化解負能量與煞氣，改善睡眠。'},
+    ],
+    guiren:{el:'火',color:'紅色／紫色',note:'火生土'} },
+  '金':{ color:'#d8d3c0', glow:'rgba(216,211,192,.45)', soft:'rgba(216,211,192,.12)',
+    stems:{'庚':'陽金 · 刀劍鋼鐵','辛':'陰金 · 珠玉飾金'},
+    trait:'日主屬金者，稟秋肅之氣，性情剛毅果決、重義守諾。金主義，故講原則、尚秩序，自律甚嚴，一諾千金。然金性過剛，每失於峻冷難融；剛而能容、威而帶溫，方成大器。',
+    psych:['命主律己律人皆嚴。老師勸你：化「標準」為「方向」，容人，亦容己之不全。','過守原則易顯疏離；適時露情、偶爾示弱，反能使人相親。','逢僵局而鑽牛角尖時，當自問：是否尚有第三條路可行？','果斷乃命主之利器；然休養生息非為怠惰，實乃蓄力以待再發。'],
+    colors:[['純白','#f0ede4'],['金','#d4b483'],['銀','#c0c4cc']],
+    boost:'宜近素白金色，佩白水晶、鈦晶之屬，整肅環境、立定章法，以助肅斂之氣',
+    crystals:[
+      {n:'白水晶',en:'Clear Quartz',fx:'「水晶之王」，全方位淨化磁場、增強氣場與能量，可平衡身心、提升專注。'},
+      {n:'鈦晶',en:'Rutilated Quartz',fx:'招正偏財、氣場強盛，增強領導力與決斷力，招貴人、擋小人。'},
+      {n:'月光石',en:'Moonstone',fx:'安撫情緒、招桃花與好人緣，增進直覺與個人魅力，助感情圓滿。'},
+    ],
+    guiren:{el:'土',color:'黃色',note:'土生金'} },
+  '水':{ color:'#5b9bd5', glow:'rgba(91,155,213,.45)', soft:'rgba(91,155,213,.13)',
+    stems:{'壬':'陽水 · 江河大海','癸':'陰水 · 雨露泉流'},
+    trait:'日主屬水者，得冬藏之氣，聰穎靈動、智巧善變。水主智，故思慮周詳、應變敏捷，言談得體、廣結善緣。然水性多流，思之過密則易生憂疑；心安則智明，慮減則福增。',
+    psych:['命主思深慮遠，然過慮易招煩擾。老師勸你：將心念落於紙上，自得一分澄明。','善應變固佳，然毋為迎合他人而長屈己意；己之感受，亦當珍視。','水性宜靜養，社交之後獨處充電，本是常理，不必為此自責。','情緒如水、暗流潛湧；當尋一穩定出口（書寫、運動、知己傾訴），方不致氾濫。'],
+    colors:[['玄黑','#2a2a30'],['湛藍','#2e6f9e'],['灰','#7a7d85']],
+    boost:'宜近玄黑湛藍，佩黑曜石、海藍寶之屬，多飲水、近水而居，以助潤下之氣',
+    crystals:[
+      {n:'黑曜石',en:'Obsidian',fx:'強力辟邪擋煞、防小人，吸納負能量、穩定身心，最強的防護之石。'},
+      {n:'海藍寶',en:'Aquamarine',fx:'增進溝通與表達、平靜情緒，招正緣與好人緣，象徵幸福與勇氣。'},
+      {n:'黑碧璽',en:'Black Tourmaline',fx:'強力防護與排負能量，改善氣場與睡眠，增強體力、擋煞防小人。'},
+    ],
+    guiren:{el:'金',color:'白色／金色',note:'金生水'} },
+};
+
+const yy=document.getElementById('yy'), mm=document.getElementById('mm'), dd=document.getElementById('dd');
+const now=new Date();
+for(let y=now.getFullYear(); y>=1920; y--){ yy.add(new Option(y+' 年', y)); }
+for(let m=1; m<=12; m++){ mm.add(new Option(m+' 月', m)); }
+function fillDays(){ const y=+yy.value, m=+mm.value, dim=new Date(y,m,0).getDate(), cur=+dd.value||1; dd.innerHTML=''; for(let d=1; d<=dim; d++) dd.add(new Option(d+' 日', d)); dd.value=Math.min(cur,dim); }
+yy.value=1995; mm.value=1; fillDays(); yy.onchange=fillDays; mm.onchange=fillDays;
+
+function jdn(y,m,d){const a=Math.floor((14-m)/12),Y=y+4800-a,M=m+12*a-3;return d+Math.floor((153*M+2)/5)+365*Y+Math.floor(Y/4)-Math.floor(Y/100)+Math.floor(Y/400)-32045;}
+const TERMS=[[2,4],[3,6],[4,5],[5,6],[6,6],[7,7],[8,8],[9,8],[10,8],[11,7],[12,7],[1,6]];
+function after(m,d,tm,td){return m>tm||(m===tm&&d>=td);}
+function before(m,d,tm,td){return m<tm||(m===tm&&d<td);}
+function bazi(y,m,d){
+  let yy2=y; if(m<2||(m===2&&d<TERMS[0][1])) yy2=y-1;
+  const yGan=((yy2-4)%10+10)%10, yZhi=((yy2-4)%12+12)%12;
+  let mi=11;
+  for(let i=0;i<11;i++){ const cur=TERMS[i], nxt=TERMS[i+1]; if(after(m,d,cur[0],cur[1])&&before(m,d,nxt[0],nxt[1])){mi=i;break;} }
+  if(m===12&&d>=TERMS[10][1]) mi=10; else if(m===1&&d<TERMS[11][1]) mi=10; else if(m===1&&d>=TERMS[11][1]) mi=11;
+  const mZhi=(mi+2)%12, yinStem=((yGan%5)*2+2)%10, mGan=(yinStem+mi)%10;
+  const j=jdn(y,m,d), dGan=(j+9)%10, dZhi=(j+1)%12;
+  return {yGan,yZhi,mGan,mZhi,dGan,dZhi};
+}
+function zodiac(y,m,d){ let Y=y; if(m<2||(m===2&&d<4)) Y=y-1; return SX[((Y-1900)%12+12)%12]; }
+function elSpan(w){return `<b style="color:${DATA[w].color}">${w}</b>`;}
+
+let gender='男';
+function setGender(g){ gender=g; document.getElementById('gM').classList.toggle('active',g==='男'); document.getElementById('gF').classList.toggle('active',g==='女'); }
+
+const SIGNS=[
+ {n:'摩羯座',s:'♑',f:[12,22],t:[1,19]},{n:'水瓶座',s:'♒',f:[1,20],t:[2,18]},{n:'雙魚座',s:'♓',f:[2,19],t:[3,20]},
+ {n:'牡羊座',s:'♈',f:[3,21],t:[4,19]},{n:'金牛座',s:'♉',f:[4,20],t:[5,20]},{n:'雙子座',s:'♊',f:[5,21],t:[6,21]},
+ {n:'巨蟹座',s:'♋',f:[6,22],t:[7,22]},{n:'獅子座',s:'♌',f:[7,23],t:[8,22]},{n:'處女座',s:'♍',f:[8,23],t:[9,22]},
+ {n:'天秤座',s:'♎',f:[9,23],t:[10,23]},{n:'天蠍座',s:'♏',f:[10,24],t:[11,22]},{n:'射手座',s:'♐',f:[11,23],t:[12,21]}];
+function signOf(m,d){ for(const s of SIGNS){const[fm,fd]=s.f,[tm,td]=s.t; if(fm<=tm){if((m===fm&&d>=fd)||(m===tm&&d<=td)||(m>fm&&m<tm))return s;}else{if((m===fm&&d>=fd)||(m===tm&&d<=td))return s;}} return SIGNS[0]; }
+function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const HLV=[2,3,3,4,4,4,5,5];
+const HORO_COLOR=['紅色','橙色','黃色','綠色','藍色','紫色','白色','粉色','金色'];
+const HORO_TEXT=[
+ '今天整體節奏順暢，適合主動出擊，把握上午的好能量推進重要的事。',
+ '今天宜靜不宜動，放慢腳步、把手邊的事收尾，會有意外的踏實感。',
+ '貴人運不錯，遇到難題別硬撐，開口求助會有人伸出援手。',
+ '情緒容易起伏，記得深呼吸；對自己溫柔一點，今天就會順很多。',
+ '適合整理與規劃的一天，把計畫寫下來，思路會格外清晰。',
+ '人際互動加分，主動釋出善意，能收穫意想不到的好緣分。',
+ '財務上宜守不宜衝，理性消費，把錢花在真正重要的地方。',
+ '直覺特別準的一天，相信第一感覺，別想太多反而更順。'];
+const HORO_TIP=[
+ '穿戴一件喜歡的飾品，提升自信與好心情。',
+ '主動向一位朋友問好，拓展你的好人緣。',
+ '整理書桌或包包，清爽的環境帶來清爽的運氣。',
+ '出門前喝杯溫水，從照顧身體開始照顧運勢。',
+ '對著鏡子笑一個，好運從好心情開始。',
+ '早點睡、別熬夜，養足精神就是養運氣。'];
+function starStr(n){return `<span class="stars">${'★'.repeat(n)}<span class="off">${'☆'.repeat(5-n)}</span></span>`;}
+function dailyHoro(name){
+  const t=new Date(), key=`${t.getFullYear()}-${t.getMonth()+1}-${t.getDate()}`;
+  const rng=mulberry32(hashStr(name+key)), pick=a=>a[Math.floor(rng()*a.length)], st=()=>HLV[Math.floor(rng()*HLV.length)];
+  return {z:st(),love:st(),work:st(),money:st(),num:1+Math.floor(rng()*9),color:pick(HORO_COLOR),text:pick(HORO_TEXT),tip:pick(HORO_TIP),date:`${t.getMonth()+1}月${t.getDate()}日`};
+}
+
+const CART={
+ '綠幽靈':{t:'point',c:['#9be3b0','#4caf6f','#266b3f'],x:'phantom'},
+ '綠東陵玉':{t:'tumble',c:['#9ce6b2','#4aa869','#2c7546'],x:'sparkle'},
+ '橄欖石':{t:'facet',c:['#e2f29a','#9cc23f','#5f7a22']},
+ '石榴石':{t:'facet',c:['#e06a82','#b02038','#5e0f1c']},
+ '紅紋石':{t:'tumble',c:['#ffd0dc','#f06a92','#c23a64'],x:'pinkband'},
+ '紫水晶':{t:'point',c:['#d8b4ec','#9b59c4','#5a2a80']},
+ '黃水晶':{t:'point',c:['#ffe79a','#f0b429','#a8730e']},
+ '虎眼石':{t:'tumble',c:['#e6bc78','#a8702a','#5e3a14'],x:'tigerband'},
+ '茶晶':{t:'point',c:['#c2b3a4','#7a6a5a','#42382f']},
+ '白水晶':{t:'point',c:['#ffffff','#e2e7f0','#a8b0c2']},
+ '鈦晶':{t:'point',c:['#f2f4fa','#dadeea','#a8b0c2'],x:'rutile'},
+ '月光石':{t:'tumble',c:['#f6f8fc','#dde6f2','#aebfd8'],x:'sheen'},
+ '黑曜石':{t:'tumble',c:['#52525c','#23232b','#0a0a0e'],x:'gloss'},
+ '海藍寶':{t:'point',c:['#bdeef6','#6cc7e0','#2c84a6']},
+ '黑碧璽':{t:'column',c:['#42424c','#1c1c24','#0a0a0e']},
+};
+let _uid=0;
+function _point(id,l,m,d,x){
+  const xL=27,xML=35,xMR=45,xR=53,ap=40,ya=11,yt=30,yb=70; let extra='';
+  if(x==='phantom') extra=`<polygon points="40,23 ${xML+1},${yt} ${xMR-1},${yt}" fill="${l}" opacity="0.55"/>`;
+  if(x==='rutile') extra=`<g stroke="#e3b224" stroke-width="0.9" opacity="0.85"><line x1="37" y1="33" x2="47" y2="66"/><line x1="41" y1="31" x2="44" y2="68"/><line x1="34" y1="40" x2="46" y2="58"/></g>`;
+  return `<ellipse cx="40" cy="72" rx="16" ry="3.6" fill="#000" opacity="0.28"/><polygon points="${xL},${yt} ${xML},${yt} ${xML},${yb} ${xL},${yb}" fill="${d}"/><polygon points="${xML},${yt} ${xMR},${yt} ${xMR},${yb} ${xML},${yb}" fill="${m}"/><polygon points="${xMR},${yt} ${xR},${yt} ${xR},${yb} ${xMR},${yb}" fill="${l}"/><polygon points="${ap},${ya} ${xL},${yt} ${xML},${yt}" fill="${d}"/><polygon points="${ap},${ya} ${xML},${yt} ${xMR},${yt}" fill="${m}"/><polygon points="${ap},${ya} ${xMR},${yt} ${xR},${yt}" fill="${l}"/>${extra}<rect x="${xML}" y="${yt}" width="${xMR-xML}" height="${yb-yt}" fill="url(#sh${id})"/><polygon points="${xL},${yt} ${xR},${yt} ${xR},${yb} ${xL},${yb} ${ap},${ya}" fill="none" stroke="#fff" stroke-opacity="0.22" stroke-width="0.6"/>`;
+}
+function _tumble(id,l,m,d,x){
+  let extra=''; const cp=`clip-path="url(#cp${id})"`;
+  if(x==='tigerband')extra=`<g ${cp}><path d="M14,38 Q40,30 66,40" stroke="#f0c87a" stroke-width="3" fill="none" opacity="0.7"/><path d="M14,46 Q40,38 66,48" stroke="#7a4a1c" stroke-width="3" fill="none" opacity="0.6"/><path d="M14,53 Q40,46 66,55" stroke="#f0c87a" stroke-width="2.5" fill="none" opacity="0.6"/></g>`;
+  if(x==='pinkband')extra=`<g ${cp}><path d="M12,40 Q40,33 68,42" stroke="#fff" stroke-width="2.5" fill="none" opacity="0.6"/><path d="M12,49 Q40,43 68,51" stroke="#fff" stroke-width="2" fill="none" opacity="0.5"/></g>`;
+  if(x==='sparkle')extra=`<g fill="#fff" opacity="0.8"><circle cx="34" cy="38" r="0.9"/><circle cx="46" cy="45" r="0.8"/><circle cx="40" cy="52" r="0.7"/><circle cx="50" cy="36" r="0.7"/><circle cx="30" cy="48" r="0.6"/></g>`;
+  if(x==='sheen')extra=`<ellipse cx="44" cy="46" rx="15" ry="9" fill="#8fc0ee" opacity="0.45" ${cp}/>`;
+  const hl=x==='gloss'?`<ellipse cx="32" cy="33" rx="7" ry="11" fill="#fff" opacity="0.5"/>`:`<ellipse cx="31" cy="33" rx="9" ry="6" fill="#fff" opacity="0.32"/>`;
+  return `<clipPath id="cp${id}"><ellipse cx="40" cy="42" rx="26" ry="22"/></clipPath><ellipse cx="40" cy="70" rx="20" ry="4.2" fill="#000" opacity="0.25"/><ellipse cx="40" cy="42" rx="26" ry="22" fill="url(#rg${id})"/>${extra}${hl}`;
+}
+function _facet(id,l,m,d){
+  return `<ellipse cx="40" cy="70" rx="14" ry="3.4" fill="#000" opacity="0.25"/><polygon points="40,14 58,30 40,34" fill="${d}"/><polygon points="40,14 22,30 40,34" fill="${l}"/><polygon points="22,30 40,34 30,60" fill="${d}"/><polygon points="58,30 40,34 50,60" fill="${l}"/><polygon points="40,34 30,60 50,60" fill="${m}"/><polygon points="30,60 50,60 40,67" fill="${d}"/><polygon points="40,14 58,30 50,60 40,67 30,60 22,30" fill="none" stroke="#fff" stroke-opacity="0.28" stroke-width="0.6"/>`;
+}
+function _column(id,l,m,d){
+  return `<ellipse cx="40" cy="70" rx="13" ry="3.4" fill="#000" opacity="0.32"/><polygon points="30,16 50,16 50,68 30,68" fill="${m}"/><polygon points="30,16 38,16 38,68 30,68" fill="${d}"/><polygon points="44,16 50,16 50,68 44,68" fill="${l}"/><g stroke="${d}" stroke-width="0.7" opacity="0.55"><line x1="33" y1="16" x2="33" y2="68"/><line x1="36" y1="16" x2="36" y2="68"/><line x1="40" y1="16" x2="40" y2="68"/><line x1="44" y1="16" x2="44" y2="68"/><line x1="47" y1="16" x2="47" y2="68"/></g><polygon points="30,16 50,16 50,19 30,19" fill="#fff" opacity="0.3"/>`;
+}
+function crystalSVG(name){
+  const A=CART[name]; if(!A) return ''; const id=++_uid, [l,m,d]=A.c;
+  let body,defs='';
+  if(A.t==='point'){body=_point(id,l,m,d,A.x); defs=`<linearGradient id="sh${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.55"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.05"/><stop offset="1" stop-color="#fff" stop-opacity="0.25"/></linearGradient>`;}
+  else if(A.t==='tumble'){body=_tumble(id,l,m,d,A.x); defs=`<radialGradient id="rg${id}" cx="0.38" cy="0.34" r="0.75"><stop offset="0" stop-color="${l}"/><stop offset="0.55" stop-color="${m}"/><stop offset="1" stop-color="${d}"/></radialGradient>`;}
+  else if(A.t==='facet')body=_facet(id,l,m,d);
+  else body=_column(id,l,m,d);
+  return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs>${body}</svg>`;
+}
+
+let _curYear, _dmGan, _dmGender;
+function shishen(dGan,lnGan){
+  const dEl=GAN_WX[dGan], lEl=GAN_WX[lnGan], di=WXO.indexOf(dEl), li=WXO.indexOf(lEl), same=(dGan%2)===(lnGan%2);
+  let cat,name;
+  if(li===di){cat='比劫'; name=same?'比肩':'劫財';}
+  else if(li===(di+4)%5){cat='印'; name=same?'偏印':'正印';}
+  else if(li===(di+1)%5){cat='食傷'; name=same?'食神':'傷官';}
+  else if(li===(di+2)%5){cat='財'; name=same?'偏財':'正財';}
+  else {cat='官殺'; name=same?'七殺':'正官';}
+  return {cat,name,lEl};
+}
+const LN_READ={
+ '印':{t:'印星之年 · 生身助我',base:'今歲行印運，乃生身助我之年。主貴人、長輩、文書與學業，利進修、考照、求師問道，亦宜靜養調身。此年多得人提攜、心神宜定；唯印旺則易生惰性，不可耽於安逸而失進取之志。',yi:'進修考照、簽約文書、調養身心、親近師長貴人',ji:'怠惰因循、過度依賴、坐失良機'},
+ '比劫':{t:'比劫之年 · 同氣相求',base:'今歲逢比劫，同氣相求之年。主手足、朋輩、合夥與競爭；得友助則事半功倍，亦須防破財、爭利與口舌是非。此年宜廣結善緣而慎於財務，合夥投資尤須明算分明、白紙黑字為憑。',yi:'結盟合作、健身強體、廣納人脈',ji:'借貸擔保、合夥不清、衝動破財'},
+ '食傷':{t:'食傷之年 · 秀氣外洩',base:'今歲行食傷，秀氣外洩之年。主才華、表達、創作與口福，利展演、文藝、開創與副業經營。此年靈感泉湧、宜盡情施展；唯傷官鋒芒易招口舌，恃才傲物則招損，言語行事當留三分餘地。',yi:'創作發表、展現才華、開拓副業',ji:'恃才傲物、口無遮攔、樹敵招怨'},
+ '財':{t:'財星之年 · 我所能掌',base:'今歲行財運，我所能掌之年。主錢財、事功與實務成果；正財主正業薪資之穩進，偏財主投資機緣之橫財。此年求財有道、付出有得；唯財旺須身能任之，不可貪多務得、過勞傷身。',yi:'拓展事業、穩健理財、把握實務機會',ji:'貪婪冒進、過度操勞、見利忘形'},
+ '官殺':{t:'官殺之年 · 克身立威',base:'今歲行官殺，克身立威之年。主事業、職權、責任與考驗；正官主正途之升遷名分，七殺主壓力挑戰與突破。此年壓力與機會並存，能扛則更上層樓，過重則勞形傷神；宜借力使力、張弛有度，化壓力為動力。',yi:'謀職升遷、承擔要務、迎難突破',ji:'硬撐逞強、忽視健康、與上爭鋒'},
+};
+function renderLiunian(year){
+  const lnGan=((year-4)%10+10)%10, lnZhi=((year-4)%12+12)%12, animal=SX[((year-1900)%12+12)%12];
+  const ss=shishen(_dmGan,lnGan), r=LN_READ[ss.cat];
+  let love='';
+  if(ss.cat==='財'&&_dmGender==='男') love='　<span style="color:var(--el)">男命逢財星之年，亦主姻緣、桃花，利論及婚嫁。</span>';
+  if(ss.cat==='官殺'&&_dmGender==='女') love='　<span style="color:var(--el)">女命逢官殺之年，亦主姻緣，利論及婚嫁。</span>';
+  return `<div class="ln-gz">${year} 年為 <b>${GAN[lnGan]}${ZHI[lnZhi]}年</b>（${animal}年）· 流年天干 ${elSpan(ss.lEl)}，於命主日主為 <b style="color:var(--el)">${ss.name}</b></div>
+  <div class="ln-type">${r.t}</div>
+  <div class="trait" style="font-size:14px;">${r.base}${love}</div>
+  <div class="ln-yiji"><div><span class="yi">宜</span>${r.yi}</div><div><span class="ji">忌</span>${r.ji}</div></div>`;
+}
+function changeYear(delta){ const ny=_curYear+delta; if(ny<1920||ny>2100) return; _curYear=ny; document.getElementById('lnYear').textContent=ny; document.getElementById('lnBox').innerHTML=renderLiunian(ny); }
+
+function buildDiagram(me){
+  const cx=150,cy=150,R=104,nr=26;
+  const pos=WXO.map((w,k)=>{const a=(-90+k*72)*Math.PI/180;return{w,x:cx+R*Math.cos(a),y:cy+R*Math.sin(a)};});
+  let sheng='',ke='',nodes='';
+  for(let k=0;k<5;k++){const p=pos[k],q=pos[(k+1)%5];sheng+=`<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${q.x.toFixed(1)}" y2="${q.y.toFixed(1)}" stroke="${DATA[p.w].color}" stroke-width="1.7" opacity="0.5"/>`;}
+  for(let k=0;k<5;k++){const p=pos[k],q=pos[(k+2)%5];ke+=`<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${q.x.toFixed(1)}" y2="${q.y.toFixed(1)}" stroke="#8a8474" stroke-width="1" stroke-dasharray="3 4" opacity="0.5"/>`;}
+  nodes=pos.map(p=>{const on=p.w===me;return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${nr}" fill="${DATA[p.w].color}" fill-opacity="${on?0.92:0.12}" stroke="${DATA[p.w].color}" stroke-width="${on?2.5:1.3}" ${on?'filter="url(#gl)"':''}/><text x="${p.x.toFixed(1)}" y="${(p.y+1).toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="'Ma Shan Zheng',cursive" font-size="27" fill="${on?'#15140f':DATA[p.w].color}">${p.w}</text>`;}).join('');
+  return `<svg viewBox="0 0 300 300" width="100%" style="max-width:290px;display:block;margin:0 auto;"><defs><filter id="gl" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>${ke}${sheng}${nodes}</svg>`;
+}
+
+function reveal(){
+  const y=+yy.value, m=+mm.value, d=+dd.value;
+  const b=bazi(y,m,d);
+  const wx=GAN_WX[b.dGan], info=DATA[wx], sx=zodiac(y,m,d), stemDesc=info.stems[GAN[b.dGan]];
+  const sg=signOf(m,d), h=dailyHoro(sg.n);
+  const zao=gender==='男'?'乾造':'坤造';
+  // distribution
+  const cnt={木:0,火:0,土:0,金:0,水:0};
+  cnt[GAN_WX[b.yGan]]++; cnt[ZHI_WX[b.yZhi]]++; cnt[GAN_WX[b.mGan]]++; cnt[ZHI_WX[b.mZhi]]++; cnt[GAN_WX[b.dGan]]++; cnt[ZHI_WX[b.dZhi]]++;
+  const lacks=WXO.filter(w=>cnt[w]===0);
+  const minc=Math.min(...WXO.map(w=>cnt[w]));
+  const weak=WXO.filter(w=>cnt[w]===minc);
+  const maxc=Math.max(...WXO.map(w=>cnt[w]),1);
+
+  document.documentElement.style.setProperty('--el',info.color);
+  document.documentElement.style.setProperty('--el-glow',info.glow);
+  document.documentElement.style.setProperty('--el-soft',info.soft);
+  document.getElementById('seal').textContent=wx;
+
+  const pillars=[['年柱',GAN[b.yGan]+ZHI[b.yZhi]],['月柱',GAN[b.mGan]+ZHI[b.mZhi]],['日柱(我)',GAN[b.dGan]+ZHI[b.dZhi]]];
+  const pillarsHtml=pillars.map(p=>`<div class="pillar"><div class="pt">${p[0]}</div><div class="pc">${p[1]}</div></div>`).join('');
+  const distHtml=WXO.map(w=>{const c=cnt[w], pct=Math.max(c/maxc*100, c>0?8:0); const tag=c===0?' · <span style="color:'+info.color+'">缺</span>':''; return `<div class="dist-row"><div class="dl" style="color:${DATA[w].color}">${w}</div><div class="bar"><i style="width:${pct}%;background:${DATA[w].color}"></i></div><div class="dn">${c} 個${tag}</div></div>`;}).join('');
+
+  let lackNote;
+  if(lacks.length){ const tips=lacks.map(w=>`${elSpan(w)}者，${DATA[w].boost}`).join('；'); lackNote=`細推命主三柱，五行之中似<b>缺 ${lacks.map(elSpan).join('、')}</b>。古法雖云「缺則補之」，然調和為要，可參酌：${tips}。`; }
+  else { lackNote=`細推命主三柱，<b>五行俱足</b>，分布尚稱中和，誠為難得之局。其中 ${weak.map(elSpan).join('、')} 略顯單薄，若欲增益，可參：${weak.map(w=>DATA[w].boost).join('；')}。`; }
+  lackNote+=`<br><span style="color:var(--text3);font-size:12px;">（老師按：此乃年、月、日三柱之約推，未含時柱；正統批命當先辨日主旺衰、再定其喜用，缺者未必盡補，補者貴在得宜。）</span>`;
+
+  const psychHtml=info.psych.map(p=>`<li>${p}</li>`).join('');
+
+  // relationships
+  const i=WXO.indexOf(wx);
+  const R=WXO[(i+4)%5], O=WXO[(i+1)%5], Wo=WXO[(i+2)%5], Km=WXO[(i+3)%5];
+  const loveFin=gender==='男'?`　<span style="color:var(--el)">男命以財為妻星，此財亦主姻緣、感情對象。</span>`:'';
+  const loveOff=gender==='女'?`　<span style="color:var(--el)">女命以官為夫星，此官殺亦主姻緣、感情對象。</span>`:'';
+  const relHtml=`
+    <li><span class="rt">生我者 · 印星（${R}生${wx}）</span>${elSpan(R)} 為命主之「印」，主<b>貴人、母長、學識與庇蔭</b>。印能生身、宜靜養；命主多近 ${elSpan(R)} 行（${DATA[R].colors[0][0]}色系），可補元氣、迎貴人。</li>
+    <li><span class="rt">同我者 · 比劫（${wx}同${wx}）</span>與命主同氣者為「比劫」，主<b>手足、同儕與競爭</b>。能助力分憂，亦會分財奪勢，宜慎擇友、明於分際。</li>
+    <li><span class="rt">我生者 · 食傷（${wx}生${O}）</span>${elSpan(wx)} 所生之 ${elSpan(O)}，是為「食神傷官」，主<b>才華、表達與付出</b>，乃命主流露於外之華采；盡可施展，然洩氣過甚則耗身，當知有出有入。</li>
+    <li><span class="rt">我克者 · 財星（${wx}克${Wo}）</span>${elSpan(wx)} 所克之 ${elSpan(Wo)}，是為「財星」，主<b>錢財、事功與所能掌握之物</b>，乃努力可致之果。${loveFin}</li>
+    <li><span class="rt">克我者 · 官殺（${Km}克${wx}）</span>克命主者 ${elSpan(Km)}，是為「官殺」，主<b>事業、上司、規矩與壓力</b>；得宜則成器顯貴，過重則勞形傷神，務須調節紓解。${loveOff}</li>`;
+
+  const colorChips=info.colors.map(c=>`<span class="chip"><span class="dot" style="background:${c[1]};color:${c[1]}"></span>${c[0]}</span>`).join('');
+  const crystalHtml=info.crystals.map(c=>`<div class="crystal"><div class="cr-img">${crystalSVG(c.n)}</div><div class="cr-body"><div class="cr-head"><span class="cr-name">${c.n}</span><span class="cr-en">${c.en}</span></div><div class="cr-fx">${c.fx}</div></div></div>`).join('');
+
+  _dmGan=b.dGan; _dmGender=gender; _curYear=new Date().getFullYear();
+  const r=document.getElementById('result');
+  r.innerHTML=`
+    <div class="glyph-card reveal" style="animation-delay:.05s">
+      <div class="glyph">${wx}</div>
+      <div class="el-label">命主元神 · 五行</div>
+      <div class="el-name">屬 <span>${wx}</span></div>
+      <div class="meta-line"><b>${zao}</b> · 日主 <b>${GAN[b.dGan]}${wx}</b>（${stemDesc}）· 生肖 <b>${sx}</b> · 星座 <b>${sg.n}</b></div>
+    </div>
+    <div class="sec reveal" style="animation-delay:.12s">
+      <div class="sec-title">今日星座運勢</div>
+      <div class="horo-head"><div class="horo-sign"><span class="sym">${sg.s}</span>${sg.n}</div><div class="horo-date">${h.date} · 今日</div></div>
+      <div class="horo-row"><span class="hl">綜合運勢</span>${starStr(h.z)}</div>
+      <div class="horo-row"><span class="hl">愛情運</span>${starStr(h.love)}</div>
+      <div class="horo-row"><span class="hl">事業 / 學業</span>${starStr(h.work)}</div>
+      <div class="horo-row"><span class="hl">財運</span>${starStr(h.money)}</div>
+      <div class="horo-info"><div>幸運色 <b>${h.color}</b></div><div>幸運數字 <b>${h.num}</b></div></div>
+      <div class="horo-text">${h.text}</div>
+      <div class="horo-tip">🍀 <b>開運小建議</b>：${h.tip}</div>
+    </div>
+    <div class="sec reveal" style="animation-delay:.16s">
+      <div class="sec-title">八字三柱 · 五行分布</div>
+      <div class="pillars-row">${pillarsHtml}</div>
+      <div class="dist">${distHtml}</div>
+      <div class="lack-note">${lackNote}</div>
+    </div>
+    <div class="sec reveal" style="animation-delay:.2s">
+      <div class="sec-title">流年運勢</div>
+      <div class="ln-nav"><button onclick="changeYear(-1)">‹</button><span id="lnYear">${_curYear}</span><button onclick="changeYear(1)">›</button></div>
+      <div id="lnBox">${renderLiunian(_curYear)}</div>
+    </div>
+    <div class="sec reveal" style="animation-delay:.26s">
+      <div class="sec-title">命主稟性</div>
+      <div class="trait">${info.trait}</div>
+      <div class="sec-title" style="margin-top:1.3rem;">幸運色</div>
+      <div class="colors">${colorChips}</div>
+    </div>
+    <div class="sec reveal" style="animation-delay:.36s">
+      <div class="sec-title">老師提點</div>
+      <ul class="psych">${psychHtml}</ul>
+    </div>
+    <div class="sec reveal" style="animation-delay:.46s">
+      <div class="sec-title">五行生克 · 制化之理</div>
+      ${buildDiagram(wx)}
+      <div class="legend"><span><span class="lg-line"></span>實線 · 相生（滋養）</span><span><span class="lg-line dash"></span>虛線 · 相克（制約）</span></div>
+      <div class="trait" style="font-size:13.5px;margin-bottom:1rem;">五行之道，生克相濟：相生者，木→火→土→金→水，循環相生，謂之生生不息；相克者，木克土、土克水、水克火、火克金、金克木，彼此制化，方得中和。今以命主日主 ${elSpan(wx)} 為樞，論其與四行之生克：</div>
+      <ul class="rel">${relHtml}</ul>
+    </div>
+    <div class="sec reveal" style="animation-delay:.56s">
+      <div class="sec-title">命主開運水晶</div>
+      ${crystalHtml}
+      <div class="guiren">🔮 <b>用神之選</b>：命主亦可佐以 <b>${info.guiren.color}</b> 系水晶（屬${info.guiren.el}），取「${info.guiren.note}」生身之義，以滋養並補強本命元神。</div>
+    </div>
+    <div class="disclaimer reveal" style="animation-delay:.66s">
+      命主五行以八字「日主天干」推算，乃命盤中代表「自身」之元神；五行分布與流年，為年月日三柱之約推。<br>
+      水晶寓意與老師提點，係民俗文化與自我覺察之參酌，非醫療或科學療效，信之則靈、權充參考，趨吉之道仍在於人。
+    </div>
+    <button class="again" onclick="document.getElementById('result').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'})">換個生日再算</button>
+  `;
+  r.classList.add('show');
+  setTimeout(()=>r.scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+</script>
+</body>
+</html>
